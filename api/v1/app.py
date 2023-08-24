@@ -1,20 +1,34 @@
+#!/usr/bin/python3
+"""Start of Flask app"""
 from flask import Flask
 from models import storage
 from api.v1.views import app_views
+from os import getenv
+from flask import jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
 
-# Register the app_views blueprint
 app.register_blueprint(app_views)
+cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
-# Method to be called when the app context tears down
-def close_storage(exception=None):
+
+@app.teardown_appcontext
+def close_storage(exception):
     storage.close()
 
-# Register the teardown function
-app.teardown_appcontext(close_storage)
 
-# Additional configuration and routes can be defined here
+@app.errorhandler(404)
+def handle_404(e):
+    return jsonify(error='Not found'), 404
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    """Starting flask server"""
+    host = '0.0.0.0'
+    port = '5000'
+    if getenv("HBNB_API_HOST"):
+        host = getenv("HBNB_API_HOST")
+    if getenv("HBNB_API_PORT"):
+        port = getenv("HBNB_API_PORT")
+    app.run(host=host, port=port, threaded=True)
