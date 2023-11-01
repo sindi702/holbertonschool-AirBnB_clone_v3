@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""First route to display a json object"""
+"""First route to display a JSON object"""
+
 from api.v1.views import app_views
 from flask import jsonify
 from models import storage
@@ -10,21 +11,25 @@ from models.review import Review
 from models.state import State
 from models.user import User
 
-
-tables = {"amenities": Amenity, "cities": City,
-          "places": Place, "reviews": Review, "states": State, "users": User}
-
+tables = {
+    "amenities": Amenity,
+    "cities": City,
+    "places": Place,
+    "reviews": Review,
+    "states": State,
+    "users": User
+}
 
 @app_views.route('/status')
 def status():
-    '''status route'''
+    """Status route to return a JSON object"""
     return jsonify(status="OK")
 
-
-@app_views.route('/stats')
+@app_views.route('/status')
 def stats():
-    ''''status fun'''
+    """Statistics route to return counts of objects"""
     counts = {}
     for key, val in tables.items():
         counts[key] = storage.count(val)
     return jsonify(**counts)
+
