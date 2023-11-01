@@ -51,4 +51,3 @@ def state_view(id=None):
                 return jsonify(error='Missing name'), 400
             x = State(name=update_values['name'])
             return jsonify(x.to_dict()), 201
-    
