@@ -4,10 +4,12 @@ from models import storage
 
 app = Flask(__name__)
 
+
 @app.teardown_appcontext
 def teardown(exception):
     """Teardown method that calls storage.close()"""
     storage.close()
+
 
 if __name__ == "__main__":
     host = os.environ.get("HBNB_API_HOST", "0.0.0.0")
